@@ -1,6 +1,13 @@
-# Docker
+# Docker Client Connector Through Unix Domain Sockets
 
-**TODO: Add description**
+
+*Need Erlang 19*
+
+Only Erlang 19 Support(Experimental)unix domain sockets
+
+## Status
+
+Just a  demo
 
 ## Installation
 
@@ -21,4 +28,3 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:docker_us_connector]]
     end
     ```
-
