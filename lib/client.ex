@@ -1,4 +1,9 @@
 defmodule Docker.Client do
+  @moduledoc """
+  Docker Client via Unix Sockets
+  docker engine 通过绑定 unix sockets 来对外暴露操作 API
+  其本质是在 unix sockets 上进行 HTTP 协议的传输
+  """
   use GenServer
   require Logger
 
@@ -12,22 +17,29 @@ defmodule Docker.Client do
   def init(address) do
    {:ok, address}
   end
+  @doc """
+  获取容器列表.
 
+  ## Examples
+
+    iex > {:ok, conn } = Docker.Client.start_link(address)
+    iex > Docker.Client.containers(conn)
+  """
   def containers(pid) do
-    GenServer.call(pid,{:get,"/containers/json"})
+    GenServer.call(pid,{:get,"/containers/json"}).body
   end
 
   @doc """
   处理 GET 请求
   """
   def handle_call({:get,url},_,address \\ "/var/run/docker.sock") do
-    Logger.debug "connect to #{address}"
     opts = [:binary,packet: :line,active: false]
     {:ok,socket} = :gen_tcp.connect({:local,address}, 0, opts)
     data = "GET #{url || "/"} HTTP/1.1\r\nHost: var.run.docker\r\n\r\n"
-    Logger.debug "HTTP request header:#{data}"
+    Logger.debug "connect to #{address} HTTP request header:#{data}"
     :ok = :gen_tcp.send(socket,data)
     response = handle_header(socket,%Docker.Response{})
+    # HTTP 中 Socket 不复用,需要关闭
     :gen_tcp.close(socket)
     {:reply, response,address}
   end
@@ -77,6 +89,9 @@ defmodule Docker.Client do
   defp parse_body(socket,response,binary,line_num)  when rem(line_num,2) != 0 do
     body = response.body<>binary
     response = Map.put(response,:body,body)
+    # 由于可能出现一次 recv 未能传输完成所有数据的情况，
+    # 需要判定收到的数据是否小于 Content-Length
+    # 小于的话 继续获取数据
     if String.length(response.body) < response.length do
        handle_body(socket,response,line_num)
     else
@@ -90,6 +105,9 @@ defmodule Docker.Client do
     Logger.debug binary
     body = response.body<>binary
     response = Map.put(response,:body,body)
+    # 由于可能出现一次 recv 未能传输完成所有数据的情况，
+    # 需要判定收到的数据是否小于 Content-Length
+    # 小于的话 继续获取数据
     if String.length(response.body) < response.length do
        handle_body(socket,response,line_num)
     else
@@ -101,10 +119,13 @@ defmodule Docker.Client do
     {:ok, binary} = :gen_tcp.recv(socket,0)
     Logger.debug "#{binary}"
     cond do
+       # Chunked 传输的结束符号为 "0\r\n"
+       # refs:https://en.wikipedia.org/wiki/Chunked_transfer_encoding
        binary== "0\r\n" ->
          Logger.debug "over"
          Logger.debug response.body
          Map.put(response,:body, Poison.decode!(response.body))
+      # 空行数据的话 跳过
        binary== "\r\n" ->
          handle_body(socket,response,line_num+1)
        true ->
