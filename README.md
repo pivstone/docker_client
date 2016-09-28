@@ -1,9 +1,9 @@
-# Docker Client Connector Through Unix Domain Sockets
+# Docker Client Connector via Unix Sockets
 
 
 *Need Erlang 19*
 
-Only Erlang 19 Support(Experimental)unix domain sockets
+Only Erlang 19 Support(Experimental)unix sockets
 
 ## Status
 
