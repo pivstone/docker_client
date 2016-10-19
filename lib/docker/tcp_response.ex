@@ -141,9 +141,7 @@ defmodule Docker.TcpResponse do
           if String.length(resp.body) < resp.len do
              handle_body(socket,resp,l_n,pid)
           else
-            send pid ,{:ok,resp.body}
-            IO.inspect(pid)
-            Logger.debug "send"
+            send pid ,{:ok,Poison.decode!(resp.body)}
             resp = Map.put(resp,:body,<<"">>)
             handle_body(socket,resp,l_n+1,pid)
           end

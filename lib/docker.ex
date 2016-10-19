@@ -19,13 +19,13 @@ defmodule Docker do
   end
 
 
-  @doc """
+  @doc ~S"""
   获取容器列表.
 
   ## Examples
 
-    iex > {:ok, conn } = Docker.Client.start_link(address)
-    iex > Docker.Client.containers(conn)
+    iex > conn = Docker.conn(address)
+    iex > Docker.containers(conn)
   """
   def containers(docker) do
     {:ok, resp} = docker.req.({:get,"/containers/json"},docker.addr)
@@ -52,9 +52,16 @@ defmodule Docker do
     resp.body
   end
 
+  @doc  ~S"""
+  注册事件监控
+
+  ## Examples
+    conn = Docker.conn(address)
+    Docker.add_event_listener(conn,pid)
+
+  """
   def add_event_listener(docker,pid) do
     docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
-    {:ok, resp}=docker.req.({:get,"/events"},docker.addr,pid)
-    resp.body
+    docker.req.({:get,"/events"},docker.addr,pid)
   end
 end

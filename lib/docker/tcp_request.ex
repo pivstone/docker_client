@@ -12,6 +12,9 @@ defmodule Docker.TcpRequest do
     {:ok,socket}
   end
 
+  @doc """
+  normal request
+  """
   def request({:get,url},addr) do
     {:ok,socket} = init(url,addr)
     resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
@@ -20,13 +23,16 @@ defmodule Docker.TcpRequest do
     :gen_tcp.close(socket)
     {:ok, resp}
   end
-
+  @doc """
+  Keep Alive steam request
+  """
   def request({:get,url},addr,pid) do
     {:ok,socket} = init(url,addr)
-    resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
-    resp = Docker.TcpResponse.handle_body(socket,resp,0,pid)
-    # HTTP 中 Socket 不复用,需要关闭
-    :gen_tcp.close(socket)
-    {:ok, resp}
+    Task.start_link(fn ->
+      resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
+      Docker.TcpResponse.handle_body(socket,resp,0,pid)
+      # HTTP 中 Socket 不复用,需要关闭
+      :gen_tcp.close(socket)
+    end)
   end
 end
