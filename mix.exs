@@ -10,7 +10,7 @@ defmodule Docker.Mixfile do
      deps: deps(),
      name: "docker_client",
      source_url: "https://github.com/pivstone/docker-us-connector",
-     docs: [main: "Docker", # The main page in the docs
+     docs: [main: "readme", # The main page in the docs
           extras: ["README.md"]]
      ]
   end
