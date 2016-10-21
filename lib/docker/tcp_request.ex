@@ -1,10 +1,11 @@
 defmodule Docker.TcpRequest do
   @moduledoc """
-  TCP Request
+  TCP Request 主要负责发起 HTTP Request
   """
   require Logger
 
   defp init(method \\ "GET",url,addr) do
+    # 因为 HTTP Protocol 的关系用 line 来recv 比较舒服
     opts = [:binary,packet: :line,active: false]
     Logger.debug "connect to #{addr} HTTP request url:#{url}"
     {:ok,socket} = :gen_tcp.connect({:local,addr}, 0, opts)

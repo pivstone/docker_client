@@ -1,6 +1,6 @@
 defmodule Docker.TcpResponse do
   @moduledoc """
-  TCP Response
+  TCP Response 主要负责读取和解析 HTTP Response
   """
   require Logger
   defstruct status_code: 404,
@@ -36,8 +36,8 @@ defmodule Docker.TcpResponse do
           resp = Map.put(resp, :status_code, status_code["status_code"]|>String.to_integer)
           handle_header(socket,resp)
 
-        String.starts_with?(bin,"\r\n") ->  # 遇到单独一行这个，说明数据已经总结了
-          parse_header(socket,resp)
+        String.starts_with?(bin,"\r\n") ->  # 遇到单独一行这个，说明数据已经结束了了
+          parse_header(resp)
 
         true ->
           [key,value] = String.split(bin,":", parts: 2)# 拆封 headers 成 key/value ，说明数据已经总结了
@@ -46,7 +46,7 @@ defmodule Docker.TcpResponse do
       end
   end
 
-  defp parse_header(socket,resp) do
+  defp parse_header(resp) do
     # 转换一下 raw_header
     # 将 Content-Length 更新到 Response 中去
     resp = if Map.has_key?(resp.headers, :"Content-Length") do

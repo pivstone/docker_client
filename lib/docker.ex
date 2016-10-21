@@ -32,16 +32,40 @@ defmodule Docker do
     resp.body
   end
 
+  @doc ~S"""
+  获取镜像列表.
+
+  ## Examples
+
+    iex > conn = Docker.conn(address)
+    iex > Docker.images(conn)
+  """
   def images(docker) do
     {:ok, resp}=docker.req.({:get,"/images/json"},docker.addr)
     resp.body
   end
 
+  @doc ~S"""
+  获取 Docker Info.
+
+  ## Examples
+
+    iex > conn = Docker.conn(address)
+    iex > Docker.info(conn)
+  """
   def info(docker) do
     {:ok, resp}=docker.req.({:get,"/info"},docker.addr)
     resp.body
   end
 
+  @doc ~S"""
+  获取 Docker 版本信息.
+
+  ## Examples
+
+    iex > conn = Docker.conn(address)
+    iex > Docker.info(conn)
+  """
   def version(docker) do
     {:ok, resp}=docker.req.({:get,"/version"},docker.addr)
     resp.body
@@ -52,13 +76,22 @@ defmodule Docker do
     resp.body
   end
 
-  @doc  ~S"""
-  注册事件监控
+  @doc ~S"""
+  获取 Docker 版本信息.
 
   ## Examples
-    conn = Docker.conn(address)
-    Docker.add_event_listener(conn,pid)
-
+  ```elixir
+  defmodule Example do
+    def listen do
+      receive do
+        {:ok, _ } -> IO.puts "World"
+      end
+      listen
+    end
+  end
+  conn = Docker.conn(address)
+  Docker.add_event_listener(conn,spawn(Example, :listen, []))
+  ```
   """
   def add_event_listener(docker,pid) do
     docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)

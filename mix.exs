@@ -3,11 +3,16 @@ defmodule Docker.Mixfile do
 
   def project do
     [app: :docker_us_connector,
-     version: "0.1.0",
+     version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+     name: "docker_us_connector",
+     source_url: "https://github.com/pivstone/docker-us-connector",
+     docs: [main: "DockerConnector", # The main page in the docs
+          extras: ["README.md"]]
+     ]
   end
 
   # Configuration for the OTP application
@@ -27,6 +32,9 @@ defmodule Docker.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:poison, "~> 2.2"}]
+    [
+      {:poison, "~> 2.2"},
+      {:ex_doc, "~> 0.14", only: :dev}
+    ]
   end
 end
