@@ -37,4 +37,20 @@ defmodule Docker.Mixfile do
       {:ex_doc, "~> 0.14", only: :dev}
     ]
   end
+
+  defp description do
+    """
+    A Docker client via Unix socket .
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+     name: :docker_client,
+     files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+     maintainers: ["pivstone@gmail.com"],
+     licenses: ["MIT licenses"],
+     links: %{"GitHub" => "https://github.com/pivstone/docker_client",
+              "Docs" => "https://pivstone.github.io/docker_client"}]
+  end
 end

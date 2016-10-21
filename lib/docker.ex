@@ -16,10 +16,10 @@ defmodule Docker do
   @doc ~S"""
 
   设置容器连接信息
-
+  
   ## Examples
 
-    iex > conn = Docker.config(address)
+    iex > conn = Docker.config("/var/run/docker.sock")
 
   """
   def config(addr \\ "/var/run/docker.sock") do
