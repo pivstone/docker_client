@@ -5,10 +5,9 @@
 /Users/pivstone/github/docker-us-connector/doc/fonts/icomoon.ttf
 /Users/pivstone/github/docker-us-connector/doc/fonts/icomoon.woff
 index.html
-DockerClient.html
+Docker.html
 404.html
 dist/sidebar_items.js
-Docker.html
 Docker.TcpRequest.html
 Docker.TcpResponse.html
 api-reference.html
