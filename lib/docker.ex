@@ -1,20 +1,28 @@
 defmodule Docker do
-  @moduledoc """
+  @moduledoc ~S"""
+
   Docker Client via Unix Sockets
-  docker engine 通过绑定 unix sockets 来对外暴露操作 API
+
+  docker engine 通过绑定 unix sockets 来对外暴露 Remote API
+
   其本质是在 unix sockets 上进行 HTTP 协议的传输
+
   """
   require Logger
 
-  defstruct addr: "/var/run/docker.sock",
+  defstruct addr: "",
             req: &Docker.TcpRequest.request/2
 
+  @doc ~S"""
 
-  def conn() do
-      %Docker{}
-  end
+  设置容器连接信息
 
-  def conn(addr) do
+  ## Examples
+
+    iex > conn = Docker.config(address)
+
+  """
+  def config(addr \\ "/var/run/docker.sock") do
       Map.put(%Docker{},:addr, addr)
   end
 
@@ -24,7 +32,7 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.conn(address)
+    iex > conn = Docker.config(address)
     iex > Docker.containers(conn)
   """
   def containers(docker) do
@@ -37,7 +45,7 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.conn(address)
+    iex > conn = Docker.config(address)
     iex > Docker.images(conn)
   """
   def images(docker) do
@@ -50,7 +58,7 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.conn(address)
+    iex > conn = Docker.config(address)
     iex > Docker.info(conn)
   """
   def info(docker) do
@@ -77,7 +85,7 @@ defmodule Docker do
   end
 
   @doc ~S"""
-  获取 Docker 版本信息.
+  添加 Docker Event 监听器.
 
   ## Examples
   ```elixir

@@ -84,6 +84,29 @@ end</code></pre>
 end</code></pre>
 </li>
 </ol>
+<h2 id="usage" class="section-heading">
+  <a href="#usage" class="hover-link"><i class="icon-link"></i></a>
+  Usage
+</h2>
+
+<pre><code class="elixir">iex&gt; config = Docker.config()
+iex&gt; Docker.containers(config)
+[%{&quot;Command&quot; =&gt; &quot;nginx -g &#39;daemon off;&#39;&quot;, &quot;Created&quot; =&gt; 1476779504,
+   &quot;HostConfig&quot; =&gt; %{&quot;NetworkMode&quot; =&gt; &quot;default&quot;},
+   &quot;Id&quot; =&gt; &quot;ccb46930869ea70f55fae0f29904a96651c59635e5bb905bfe9c5da9ed2a7021&quot;,
+   &quot;Image&quot; =&gt; &quot;nginx&quot;,
+   &quot;ImageID&quot; =&gt; &quot;sha256:ba6bed934df2e644fdd34e9d324c80f3c615544ee9a93e4ce3cfddfcf84bdbc2&quot;,
+   &quot;Labels&quot; =&gt; %{}, &quot;Mounts&quot; =&gt; [], &quot;Names&quot; =&gt; [&quot;/hungry_fermat&quot;],
+   &quot;NetworkSettings&quot; =&gt; %{&quot;Networks&quot; =&gt; %{&quot;bridge&quot; =&gt; %{&quot;Aliases&quot; =&gt; nil,
+         &quot;EndpointID&quot; =&gt; &quot;41abb0b3e7ac420ce7c2b27fd7f45361402f223d8e7f9194219409498ec6e68c&quot;,
+         &quot;Gateway&quot; =&gt; &quot;172.17.0.1&quot;, &quot;GlobalIPv6Address&quot; =&gt; &quot;&quot;,
+         &quot;GlobalIPv6PrefixLen&quot; =&gt; 0, &quot;IPAMConfig&quot; =&gt; nil,
+         &quot;IPAddress&quot; =&gt; &quot;172.17.0.2&quot;, &quot;IPPrefixLen&quot; =&gt; 16, &quot;IPv6Gateway&quot; =&gt; &quot;&quot;,
+         &quot;Links&quot; =&gt; nil, &quot;MacAddress&quot; =&gt; &quot;02:42:ac:11:00:02&quot;,
+         &quot;NetworkID&quot; =&gt; &quot;7486e5689b83e3bed92ae17c6ccce025007cb2262a031e3b06e2bd17784bfdae&quot;}}},
+   &quot;Ports&quot; =&gt; [%{&quot;PrivatePort&quot; =&gt; 443, &quot;Type&quot; =&gt; &quot;tcp&quot;},
+    %{&quot;PrivatePort&quot; =&gt; 80, &quot;Type&quot; =&gt; &quot;tcp&quot;}], &quot;State&quot; =&gt; &quot;running&quot;,
+   &quot;Status&quot; =&gt; &quot;Up 59 seconds&quot;}]</code></pre>
 
       <footer class="footer">
         <p>

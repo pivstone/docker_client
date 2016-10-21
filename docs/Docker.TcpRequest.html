@@ -95,7 +95,7 @@
     <a href="#request/2">request(arg, addr)</a>
   </div>
   
-    <div class="summary-synopsis"><p>normal request</p>
+    <div class="summary-synopsis"><p>非 Keep-Alive 的请求</p>
 </div>
   
 </div>
@@ -137,7 +137,7 @@
     </a>
     <span class="signature">request(arg, addr)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker/tcp_request.ex#L19" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker/tcp_request.ex#L20" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -145,7 +145,7 @@
     
   </div>
   <section class="docstring">
-    <p>normal request</p>
+    <p>非 Keep-Alive 的请求</p>
 
   </section>
 </div>
@@ -157,7 +157,7 @@
     </a>
     <span class="signature">request(arg, addr, pid)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker/tcp_request.ex#L30" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker/tcp_request.ex#L33" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -166,6 +166,7 @@
   </div>
   <section class="docstring">
     <p>Keep Alive steam request</p>
+<p><em>注意</em> 流中断之后，要客户端重新连接，中断期间的数据不会重发</p>
 
   </section>
 </div>

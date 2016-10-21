@@ -70,9 +70,9 @@
 
       
         <section id="moduledoc">
-          <p>Docker Client via Unix Sockets
-docker engine 通过绑定 unix sockets 来对外暴露操作 API
-其本质是在 unix sockets 上进行 HTTP 协议的传输</p>
+          <p>Docker Client via Unix Sockets</p>
+<p>docker engine 通过绑定 unix sockets 来对外暴露 Remote API</p>
+<p>其本质是在 unix sockets 上进行 HTTP 协议的传输</p>
 
         </section>
       
@@ -97,20 +97,17 @@ docker engine 通过绑定 unix sockets 来对外暴露操作 API
     <a href="#add_event_listener/2">add_event_listener(docker, pid)</a>
   </div>
   
-    <div class="summary-synopsis"><p>获取 Docker 版本信息</p>
+    <div class="summary-synopsis"><p>添加 Docker Event 监听器</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#conn/0">conn()</a>
+    <a href="#config/1">config(addr \\ &quot;/var/run/docker.sock&quot;)</a>
   </div>
   
+    <div class="summary-synopsis"><p>设置容器连接信息</p>
 </div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#conn/1">conn(addr)</a>
-  </div>
   
 </div>
 <div class="summary-row">
@@ -184,7 +181,7 @@ docker engine 通过绑定 unix sockets 来对外暴露操作 API
     </a>
     <span class="signature">add_event_listener(docker, pid)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L96" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L104" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -192,7 +189,7 @@ docker engine 通过绑定 unix sockets 来对外暴露操作 API
     
   </div>
   <section class="docstring">
-    <p>获取 Docker 版本信息.</p>
+    <p>添加 Docker Event 监听器.</p>
 <h2 id="add_event_listener/2-examples" class="section-heading">
   <a href="#add_event_listener/2-examples" class="hover-link"><i class="icon-link"></i></a>
   Examples
@@ -211,15 +208,17 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
 
   </section>
 </div>
-<div class="detail" id="conn/0">
+<div class="detail" id="config/1">
+  
+    <span id="config/0" />
   
   <div class="detail-header">
-    <a href="#conn/0" class="detail-link" title="Link to this function">
+    <a href="#config/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">conn()</span>
+    <span class="signature">config(addr \\ &quot;/var/run/docker.sock&quot;)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L13" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L25" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -227,26 +226,14 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     
   </div>
   <section class="docstring">
-    
-  </section>
-</div>
-<div class="detail" id="conn/1">
-  
-  <div class="detail-header">
-    <a href="#conn/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">conn(addr)</span>
-    
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L17" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-    
-    
-  </div>
-  <section class="docstring">
-    
+    <p>设置容器连接信息</p>
+<h2 id="config/1-examples" class="section-heading">
+  <a href="#config/1-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<p>  iex &gt; conn = Docker.config(address)</p>
+
   </section>
 </div>
 <div class="detail" id="containers/1">
@@ -257,7 +244,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     </a>
     <span class="signature">containers(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L30" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L38" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -271,7 +258,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
   Examples
 </h2>
 
-<p>  iex &gt; conn = Docker.conn(address)
+<p>  iex &gt; conn = Docker.config(address)
   iex &gt; Docker.containers(conn)</p>
 
   </section>
@@ -284,7 +271,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     </a>
     <span class="signature">images(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L43" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L51" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -298,7 +285,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
   Examples
 </h2>
 
-<p>  iex &gt; conn = Docker.conn(address)
+<p>  iex &gt; conn = Docker.config(address)
   iex &gt; Docker.images(conn)</p>
 
   </section>
@@ -311,7 +298,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     </a>
     <span class="signature">info(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L56" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L64" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -325,7 +312,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
   Examples
 </h2>
 
-<p>  iex &gt; conn = Docker.conn(address)
+<p>  iex &gt; conn = Docker.config(address)
   iex &gt; Docker.info(conn)</p>
 
   </section>
@@ -338,7 +325,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     </a>
     <span class="signature">version(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L69" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L77" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -365,7 +352,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     </a>
     <span class="signature">volumes(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L74" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L82" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

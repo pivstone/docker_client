@@ -1,5 +1,6 @@
 defmodule Docker.TcpRequest do
   @moduledoc """
+
   TCP Request 主要负责发起 HTTP Request
   """
   require Logger
@@ -14,7 +15,7 @@ defmodule Docker.TcpRequest do
   end
 
   @doc """
-  normal request
+  非 Keep-Alive 的请求
   """
   def request({:get,url},addr) do
     {:ok,socket} = init(url,addr)
@@ -26,6 +27,8 @@ defmodule Docker.TcpRequest do
   end
   @doc """
   Keep Alive steam request
+
+  *注意* 流中断之后，要客户端重新连接，中断期间的数据不会重发
   """
   def request({:get,url},addr,pid) do
     {:ok,socket} = init(url,addr)

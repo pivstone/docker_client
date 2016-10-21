@@ -26,7 +26,9 @@ defmodule Docker.TcpResponse do
     end
   end
 
-    # 处理headers
+  @doc ~S"""
+  参照 HTTP 协议处理 HTTP的返回头
+  """
   def handle_header(socket,resp)  do
     {:ok,bin} = :gen_tcp.recv(socket, 0,3000)
     Logger.debug bin
