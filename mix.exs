@@ -2,15 +2,15 @@ defmodule Docker.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :docker_us_connector,
+    [app: :docker_client,
      version: "0.2.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
-     name: "docker_us_connector",
+     name: "docker_client",
      source_url: "https://github.com/pivstone/docker-us-connector",
-     docs: [main: "DockerConnector", # The main page in the docs
+     docs: [main: "DockerClient", # The main page in the docs
           extras: ["README.md"]]
      ]
   end
