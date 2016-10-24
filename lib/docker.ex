@@ -16,13 +16,13 @@ defmodule Docker do
   @doc ~S"""
 
   设置容器连接信息
-  
+
   ## Examples
 
-    iex > conn = Docker.config("/var/run/docker.sock")
+    iex > conn = Docker.config("unix:///var/run/docker.sock")
 
   """
-  def config(addr \\ "/var/run/docker.sock") do
+  def config(addr \\ "unix:///var/run/docker.sock") do
       Map.put(%Docker{},:addr, addr)
   end
 
@@ -104,5 +104,28 @@ defmodule Docker do
   def add_event_listener(docker,pid) do
     docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
     docker.req.({:get,"/events"},docker.addr,pid)
+  end
+
+
+  @doc ~S"""
+  添加 Docker Log 监听器.
+
+  ## Examples
+  ```elixir
+  defmodule Example do
+    def listen do
+      receive do
+        {:ok, _ } -> IO.puts "World"
+      end
+      listen
+    end
+  end
+  conn = Docker.conn(address)
+  Docker.add_event_listener(conn,spawn(Example, :listen, []))
+  ```
+  """
+  def add_log_listener(docker,pid) do
+    docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
+    docker.req.({:get,"/log"},docker.addr,pid)
   end
 end

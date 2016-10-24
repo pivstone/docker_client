@@ -7,10 +7,22 @@ defmodule Docker.TcpRequest do
 
   defp init(method \\ "GET",url,addr) do
     # 因为 HTTP Protocol 的关系用 line 来recv 比较舒服
-    opts = [:binary,packet: :line,active: false]
+
     Logger.debug "connect to #{addr} HTTP request url:#{url}"
-    {:ok,socket} = :gen_tcp.connect({:local,addr}, 0, opts)
-    :ok = :gen_tcp.send(socket,"#{method} #{url || "/"} HTTP/1.1\r\nHost: var.run.docker\r\n\r\n")
+    {:ok,socket,host} =
+      case addr do
+        "unix://"<>path ->
+          opts = [:binary,packet: :line,active: false]
+          {:ok,socket} = :gen_tcp.connect({:local,path}, 0, opts)
+          {:ok,socket,"var.run.docker"}
+        "http://"<>_ ->
+          uri = URI.parse(addr)
+          host = uri.host
+          opts = [:binary,packet: :line,active: false]
+          {:ok,socket} = :gen_tcp.connect(to_charlist(uri.host),uri.port,opts)
+          {:ok,socket,host}
+      end
+    :ok = :gen_tcp.send(socket,"#{method} #{url || "/"} HTTP/1.1\r\nHost: #{host}\r\n\r\n")
     {:ok,socket}
   end
 

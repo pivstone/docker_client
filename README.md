@@ -1,7 +1,11 @@
-# Docker Client via Unix Sockets
+# Docker Client
 
+Support:
 
-*Need Erlang 19*
+HTTP / Unix Socket
+
+*NOTE*
+HTTPS(TLS) not Supported! 
 
 Only Erlang 19 Support(Experimental)unix sockets
 
