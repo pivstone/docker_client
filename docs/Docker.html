@@ -103,7 +103,16 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#config/1">config(addr \\ &quot;/var/run/docker.sock&quot;)</a>
+    <a href="#add_log_listener/2">add_log_listener(docker, pid)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>添加 Docker Log 监听器</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#config/1">config(addr \\ &quot;unix:///var/run/docker.sock&quot;)</a>
   </div>
   
     <div class="summary-synopsis"><p>设置容器连接信息</p>
@@ -208,6 +217,41 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
 
   </section>
 </div>
+<div class="detail" id="add_log_listener/2">
+  
+  <div class="detail-header">
+    <a href="#add_log_listener/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">add_log_listener(docker, pid)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L127" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>添加 Docker Log 监听器.</p>
+<h2 id="add_log_listener/2-examples" class="section-heading">
+  <a href="#add_log_listener/2-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<pre><code class="elixir">defmodule Example do
+  def listen do
+    receive do
+      {:ok, _ } -&gt; IO.puts &quot;World&quot;
+    end
+    listen
+  end
+end
+conn = Docker.conn(address)
+Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
+
+  </section>
+</div>
 <div class="detail" id="config/1">
   
     <span id="config/0" />
@@ -216,7 +260,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
     <a href="#config/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">config(addr \\ &quot;/var/run/docker.sock&quot;)</span>
+    <span class="signature">config(addr \\ &quot;unix:///var/run/docker.sock&quot;)</span>
     
       <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L25" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -232,7 +276,7 @@ Docker.add_event_listener(conn,spawn(Example, :listen, []))</code></pre>
   Examples
 </h2>
 
-<p>  iex &gt; conn = Docker.config(address)</p>
+<p>  iex &gt; conn = Docker.config(“unix:///var/run/docker.sock”)</p>
 
   </section>
 </div>
