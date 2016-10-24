@@ -16,7 +16,7 @@ Only Erlang 19 Support(Experimental)unix sockets
 
 ## Status
 
-Just a demo
+DON'T USE IN PRODUCTION NOW
 
 ## Installation
 
