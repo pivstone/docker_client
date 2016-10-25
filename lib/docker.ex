@@ -18,10 +18,10 @@ defmodule Docker do
   设置容器连接信息
 
   ## Examples
-
+  ```elixir
     iex > config = Docker.config("unix:///var/run/docker.sock")
     iex > config = Docker.config("http://192.168.0.1:12450")
-
+  ```
   """
   def config(addr \\ "unix:///var/run/docker.sock") do
       Map.put(%Docker{},:addr, addr)
@@ -32,9 +32,10 @@ defmodule Docker do
   获取容器列表.
 
   ## Examples
-
+  ```elixir
     iex > config = Docker.config(address)
     iex > Docker.containers(config)
+  ```
   """
   def containers(docker) do
     docker.req.("/containers/json",docker.addr)
@@ -44,9 +45,10 @@ defmodule Docker do
   获取镜像列表.
 
   ## Examples
-
+  ```elixir
     iex > config = Docker.config(address)
     iex > Docker.images(config)
+  ```
   """
   def images(docker) do
     docker.req.("/images/json",docker.addr)
@@ -56,9 +58,10 @@ defmodule Docker do
   获取 Docker Info.
 
   ## Examples
-
+  ```elixir
     iex > config = Docker.config(address)
     iex > Docker.info(config)
+  ```
   """
   def info(docker) do
     docker.req.("/info",docker.addr)
@@ -68,9 +71,10 @@ defmodule Docker do
   获取 Docker 版本信息.
 
   ## Examples
-
+  ```elixir
     iex > config = Docker.config(address)
     iex > Docker.info(config)
+  ```
   """
   def version(docker) do
     docker.req.("/version",docker.addr)
