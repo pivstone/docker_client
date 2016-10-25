@@ -128,32 +128,56 @@ defmodule Docker do
   end
 
   @doc """
-  启动容器
-
+  CN:启动容器
+  EN:Start a container¶
   ## Examples
   ```elixir
   config = Docker.config(address)
-  {:ok,resp} = Docker.start_container(config,"containerId")
+  {:ok,resp} = Docker.start(config,"containerId")
   """
-  def start_container(docker,id) do
+  def start(docker,id) do
     Docker.Request.post("/containers/#{id}/start",docker.addr)
   end
   @doc """
-  停止容器
-
+  CN:停止容器
+  EN:Stop a container¶
   ## Examples
   ```elixir
   config = Docker.config(address)
-  {:ok,resp} = Docker.stop_container(config,"containerId")
+  {:ok,resp} = Docker.stop(config,"containerId")
   """
-  def stop_container(docker,id) do
+  def stop(docker,id) do
      Docker.Request.post("/containers/#{id}/stop",docker.addr)
   end
 
   @doc """
-  获取指定容器ID的信息
+  CN:获取指定容器ID的信息
+  EN:Inspect a container
   """
-  def inspect_container(docker,id) do
-   docker.req.("/containers/#{id}",docker.addr)
+  def container(docker,id) do
+   docker.req.("/containers/#{id}/json",docker.addr)
   end
+
+  @doc """
+  CN:列出容器中所有的进程信息
+  EN:List processes running inside a container
+  """
+  def top(docker,id), do:docker.req.("/containers/#{id}/top",docker.addr)
+
+  @doc """
+  CN:列出容器中的资源状态
+  EN:Get container stats based on resource usage
+  """
+  def stats(docker,id), do:docker.req.("/containers/#{id}/stats",docker.addr)
+
+  @doc """
+  CN:列出容器文件系统的变更
+  EN:Inspect changes on a container’s filesystem
+  """
+  def changes(docker,id), do:docker.req.("/containers/#{id}/changes",docker.addr)
+  @doc """
+  CN:强制关闭容器
+  EN:Kill a container
+  """
+  def kill(docker,id), do:docker.req.("/containers/#{id}/kill",docker.addr)
 end
