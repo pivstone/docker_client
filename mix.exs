@@ -38,13 +38,13 @@ defmodule Docker.Mixfile do
     ]
   end
 
-  defp description do
+  def description do
     """
     A Docker client via Unix socket .
     """
   end
 
-  defp package do
+  def package do
     [# These are the default files included in the package
      name: :docker_client,
      files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],

@@ -1,7 +1,7 @@
 defmodule Docker do
   @moduledoc ~S"""
 
-  Docker Client via Unix Sockets
+  Docker Client
 
   docker engine 通过绑定 unix sockets 来对外暴露 Remote API
 
@@ -19,7 +19,7 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.config("unix:///var/run/docker.sock")
+    iex > config = Docker.config("unix:///var/run/docker.sock")
 
   """
   def config(addr \\ "unix:///var/run/docker.sock") do
@@ -32,12 +32,11 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.config(address)
-    iex > Docker.containers(conn)
+    iex > config = Docker.config(address)
+    iex > Docker.containers(config)
   """
   def containers(docker) do
-    {:ok, resp} = docker.req.({:get,"/containers/json"},docker.addr)
-    resp.body
+    docker.req.({:get,"/containers/json"},docker.addr)
   end
 
   @doc ~S"""
@@ -45,12 +44,11 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.config(address)
-    iex > Docker.images(conn)
+    iex > config = Docker.config(address)
+    iex > Docker.images(config)
   """
   def images(docker) do
-    {:ok, resp}=docker.req.({:get,"/images/json"},docker.addr)
-    resp.body
+    docker.req.({:get,"/images/json"},docker.addr)
   end
 
   @doc ~S"""
@@ -58,12 +56,11 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.config(address)
-    iex > Docker.info(conn)
+    iex > config = Docker.config(address)
+    iex > Docker.info(config)
   """
   def info(docker) do
-    {:ok, resp}=docker.req.({:get,"/info"},docker.addr)
-    resp.body
+    docker.req.({:get,"/info"},docker.addr)
   end
 
   @doc ~S"""
@@ -71,17 +68,15 @@ defmodule Docker do
 
   ## Examples
 
-    iex > conn = Docker.conn(address)
-    iex > Docker.info(conn)
+    iex > config = Docker.config(address)
+    iex > Docker.info(config)
   """
   def version(docker) do
-    {:ok, resp}=docker.req.({:get,"/version"},docker.addr)
-    resp.body
+    docker.req.({:get,"/version"},docker.addr)
   end
 
   def volumes(docker) do
-    {:ok, resp}=docker.req.({:get,"/volumes"},docker.addr)
-    resp.body
+    docker.req.({:get,"/volumes"},docker.addr)
   end
 
   @doc ~S"""
@@ -97,11 +92,11 @@ defmodule Docker do
       listen
     end
   end
-  conn = Docker.conn(address)
-  Docker.add_event_listener(conn,spawn(Example, :listen, []))
+  config = Docker.config(address)
+  Docker.add_event_listener(config,spawn(Example, :listen, []))
   ```
   """
-  def add_event_listener(docker,pid) do
+  def add_event_listener(docker,pid \\self) do
     docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
     docker.req.({:get,"/events"},docker.addr,pid)
   end
@@ -112,20 +107,26 @@ defmodule Docker do
 
   ## Examples
   ```elixir
-  defmodule Example do
-    def listen do
-      receive do
-        {:ok, _ } -> IO.puts "World"
-      end
-      listen
-    end
-  end
-  conn = Docker.conn(address)
-  Docker.add_event_listener(conn,spawn(Example, :listen, []))
+  config = Docker.config(address)
+  Docker.add_event_listener(config,container_id)
   ```
   """
-  def add_log_listener(docker,pid) do
-    docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
-    docker.req.({:get,"/log"},docker.addr,pid)
+  def add_log_listener(docker,container_id,pid\\self) do
+    Docker.TcpRequest.request({:get,"/containers/#{container_id}/logs"},docker.addr,pid)
+  end
+
+  @doc ~S"""
+  创建 Docker 容器
+
+  ## Examples
+  ```elixir
+  config = Docker.config(address)
+  {:ok,resp} = Docker.create_container(config,%{"Image" => "registry:2"})
+  assert resp.code == 201
+  ```
+  """
+  def create_container(docker,data) do
+    data_string = Poison.encode!(data)
+    Docker.TcpRequest.request({:post,"/containers/create"},docker.addr,nil,data_string)
   end
 end

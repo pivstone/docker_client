@@ -3,7 +3,7 @@ defmodule Docker.TcpResponse do
   TCP Response 主要负责读取和解析 HTTP Response
   """
   require Logger
-  defstruct status_code: 404,
+  defstruct code: 404,
             body: <<"">>,
             headers: Map.new,
             chunked: false,
@@ -16,7 +16,7 @@ defmodule Docker.TcpResponse do
     def inspect(%Docker.TcpResponse{}=resp,_) do
       """
       Response<
-        status_code: #{resp.status_code}
+        code: #{resp.code}
         headers: #{inspect resp.headers}
         body: #{inspect resp.body}
         len:#{resp.len}
@@ -34,8 +34,8 @@ defmodule Docker.TcpResponse do
     Logger.debug bin
     cond do
         String.starts_with?(bin,"HTTP/1.1") ->  # 处理 Http Status Code
-          status_code = Regex.named_captures(~r/HTTP\/1.1 (?<status_code>\d+)/, bin)
-          resp = Map.put(resp, :status_code, status_code["status_code"]|>String.to_integer)
+          code = Regex.named_captures(~r/HTTP\/1.1 (?<code>\d+)/, bin)
+          resp = Map.put(resp, :code, code["code"]|>String.to_integer)
           handle_header(socket,resp)
 
         String.starts_with?(bin,"\r\n") ->  # 遇到单独一行这个，说明数据已经结束了了
@@ -51,15 +51,15 @@ defmodule Docker.TcpResponse do
   defp parse_header(resp) do
     # 转换一下 raw_header
     # 将 Content-Length 更新到 Response 中去
-    resp = if Map.has_key?(resp.headers, :"Content-Length") do
+    resp =
+      if Map.has_key?(resp.headers, :"Content-Length") do
         len = resp.headers[:"Content-Length"]|>String.to_integer
         Map.put(resp,:len,resp.len+len)
       else
         resp
       end
     # 检查下是否为 chunked 的数据类型
-    resp = if Map.has_key?(resp.headers, :"Transfer-Encoding") ,do: Map.put(resp,:chunked, true), else: resp
-    resp
+    if Map.has_key?(resp.headers, :"Transfer-Encoding") ,do: Map.put(resp,:chunked, true), else: resp
   end
 
   # chunked 数据 偶数行为 Chunked length
@@ -105,12 +105,12 @@ defmodule Docker.TcpResponse do
    cond do
       # Chunked 传输的结束符号为 "0\r\n"
       # refs:https://en.wikipedia.org/wiki/Chunked_transfer_encoding
-      bin== "0\r\n" ->
+      bin == "0\r\n" ->
         Logger.debug "over"
         Logger.debug resp.body
         Map.put(resp,:body, Poison.decode!(resp.body))
       # 空行数据的话 跳过
-      bin== "\r\n" ->
+      bin == "\r\n" ->
         handle_body(socket,resp,l_n)
       true ->
         parse_body(socket,resp,bin,l_n)
@@ -123,11 +123,11 @@ defmodule Docker.TcpResponse do
    cond do
       # Chunked 传输的结束符号为 "0\r\n"
       # refs:https://en.wikipedia.org/wiki/Chunked_transfer_encoding
-      bin== "0\r\n" ->
+      bin == "0\r\n" ->
         Logger.debug "over"
         Logger.debug resp.body
       # 空行数据的话 跳过
-      bin== "\r\n" ->
+      bin == "\r\n" ->
         handle_body(socket,resp,l_n,pid)
       true ->
         if rem(l_n,2) == 0 do
@@ -143,7 +143,7 @@ defmodule Docker.TcpResponse do
           if String.length(resp.body) < resp.len do
              handle_body(socket,resp,l_n,pid)
           else
-            send pid ,{:ok,Poison.decode!(resp.body)}
+            send pid ,{:ok,resp.body}
             resp = Map.put(resp,:body,<<"">>)
             handle_body(socket,resp,l_n+1,pid)
           end
