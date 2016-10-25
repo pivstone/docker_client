@@ -11,7 +11,7 @@ defmodule Docker do
   require Logger
 
   defstruct addr: "",
-            req: &Docker.TcpRequest.request/2
+            req: &Docker.TcpRequest.get/2
 
   @doc ~S"""
 
@@ -20,6 +20,7 @@ defmodule Docker do
   ## Examples
 
     iex > config = Docker.config("unix:///var/run/docker.sock")
+    iex > config = Docker.config("http://192.168.0.1:12450")
 
   """
   def config(addr \\ "unix:///var/run/docker.sock") do
@@ -36,7 +37,7 @@ defmodule Docker do
     iex > Docker.containers(config)
   """
   def containers(docker) do
-    docker.req.({:get,"/containers/json"},docker.addr)
+    docker.req.("/containers/json",docker.addr)
   end
 
   @doc ~S"""
@@ -48,7 +49,7 @@ defmodule Docker do
     iex > Docker.images(config)
   """
   def images(docker) do
-    docker.req.({:get,"/images/json"},docker.addr)
+    docker.req.("/images/json",docker.addr)
   end
 
   @doc ~S"""
@@ -60,7 +61,7 @@ defmodule Docker do
     iex > Docker.info(config)
   """
   def info(docker) do
-    docker.req.({:get,"/info"},docker.addr)
+    docker.req.("/info",docker.addr)
   end
 
   @doc ~S"""
@@ -72,11 +73,11 @@ defmodule Docker do
     iex > Docker.info(config)
   """
   def version(docker) do
-    docker.req.({:get,"/version"},docker.addr)
+    docker.req.("/version",docker.addr)
   end
 
   def volumes(docker) do
-    docker.req.({:get,"/volumes"},docker.addr)
+    docker.req.("/volumes",docker.addr)
   end
 
   @doc ~S"""
@@ -97,8 +98,7 @@ defmodule Docker do
   ```
   """
   def add_event_listener(docker,pid \\self) do
-    docker = Map.put(docker,:req, &Docker.TcpRequest.request/3)
-    docker.req.({:get,"/events"},docker.addr,pid)
+    Docker.TcpRequest.get("/events",docker.addr,pid)
   end
 
 
@@ -112,7 +112,7 @@ defmodule Docker do
   ```
   """
   def add_log_listener(docker,container_id,pid\\self) do
-    Docker.TcpRequest.request({:get,"/containers/#{container_id}/logs"},docker.addr,pid)
+    Docker.TcpRequest.get("/containers/#{container_id}/logs",docker.addr,pid)
   end
 
   @doc ~S"""
@@ -124,9 +124,34 @@ defmodule Docker do
   {:ok,resp} = Docker.create_container(config,%{"Image" => "registry:2"})
   assert resp.code == 201
   ```
+  具体参数参考 (Docker Remote API)[https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container]
   """
   def create_container(docker,data) do
     data_string = Poison.encode!(data)
-    Docker.TcpRequest.request({:post,"/containers/create"},docker.addr,nil,data_string)
+    Docker.TcpRequest.post("/containers/create",docker.addr,data_string)
+  end
+
+  @doc """
+  启动容器
+
+  ## Examples
+  ```elixir
+  config = Docker.config(address)
+  {:ok,resp} = Docker.start_container(config,"containerId")
+  """
+  def start_container(docker,containerId) do
+     Docker.TcpRequest.post("/containers/#{containerId}/start",docker.addr)
+  end
+
+  @doc """
+  停止容器
+
+  ## Examples
+  ```elixir
+  config = Docker.config(address)
+  {:ok,resp} = Docker.stop_container(config,"containerId")
+  """
+  def stop_container(docker,containerId) do
+     Docker.TcpRequest.post("/containers/#{containerId}/stop",docker.addr)
   end
 end

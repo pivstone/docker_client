@@ -19,7 +19,8 @@ defmodule Docker.TcpRequest do
   end
 
 
-  def send_request(socket,url,method \\ "GET",data\\nil) do
+  defp send_request(socket,url,method \\ "GET",data\\nil) do
+    # 发送数据
     host =
       case url do
         "unix://"<>_ -> "var.run.docker"
@@ -38,33 +39,32 @@ defmodule Docker.TcpRequest do
     Logger.debug data_string
     :ok = :gen_tcp.send(socket,data_string)
   end
+
+
+  defp parse_response(socket) do
+    # 解析 Socket 收到的数据
+    resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
+    resp =  if resp.len>0 ,do: Docker.TcpResponse.handle_body(socket,resp,0), else: resp
+    # HTTP 中 Socket 不复用,需要关闭
+    :gen_tcp.close(socket)
+    {:ok, resp}
+  end
+
   @doc """
   非 Keep-Alive 的请求
   """
-  def request({:get,url},addr) do
+  def get(url,addr) do
     target_url = URI.merge(URI.parse(addr), url)|> to_string
     {:ok,socket} = init(target_url)
     send_request(socket,target_url)
     parse_response(socket)
   end
 
-  defp parse_response(socket) do
-    resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
-    resp = Docker.TcpResponse.handle_body(socket,resp,0)
-
-    # HTTP 中 Socket 不复用,需要关闭
-    :gen_tcp.close(socket)
-    {:ok, resp}
-  end
-
-  def request({:post,url},addr,params,data) do
-    target_url =
-      case is_nil(params) do
-       false -> URI.merge(URI.parse(addr), url)|> URI.merge(params)
-                 |> to_string
-       true -> URI.merge(URI.parse(addr), url)
-                 |> to_string
-      end
+  @doc """
+  POST 请求
+  """
+  def post(url,addr,data\\nil) do
+    target_url = URI.merge(URI.parse(addr), url)|> to_string
     {:ok,socket} = init(target_url)
     send_request(socket,target_url,"POST",data)
     parse_response(socket)
@@ -75,14 +75,13 @@ defmodule Docker.TcpRequest do
 
   *注意* 流中断之后，要客户端重新连接，中断期间的数据不会重发
   """
-  def request({:get,url},addr,pid) do
+  def get(url,addr,pid) do
     target_url = URI.merge(URI.parse(addr), url)|> to_string
     {:ok,socket} = init(target_url)
     send_request(socket,target_url)
     Task.start_link(fn ->
       resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
       resp = Docker.TcpResponse.handle_body(socket,resp,0,pid)
-
       # HTTP 中 Socket 不复用,需要关闭
       :gen_tcp.close(socket)
       {:ok, resp}

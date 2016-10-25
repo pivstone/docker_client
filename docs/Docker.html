@@ -157,6 +157,24 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#start_container/2">start_container(docker, containerId)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>启动容器</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#stop_container/2">stop_container(docker, containerId)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>停止容器</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#version/1">version(docker)</a>
   </div>
   
@@ -201,7 +219,7 @@
     </a>
     <span class="signature">add_event_listener(docker, pid \\ self)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L99" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L100" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -267,7 +285,7 @@ Docker.add_event_listener(config,container_id)</code></pre>
     </a>
     <span class="signature">config(addr \\ &quot;unix:///var/run/docker.sock&quot;)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L25" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L26" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -281,7 +299,8 @@ Docker.add_event_listener(config,container_id)</code></pre>
   Examples
 </h2>
 
-<p>  iex &gt; config = Docker.config(“unix:///var/run/docker.sock”)</p>
+<p>  iex &gt; config = Docker.config(“unix:///var/run/docker.sock”)
+  iex &gt; config = Docker.config(“http://192.168.0.1:12450”)</p>
 
   </section>
 </div>
@@ -293,7 +312,7 @@ Docker.add_event_listener(config,container_id)</code></pre>
     </a>
     <span class="signature">containers(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L38" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L39" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -320,7 +339,7 @@ Docker.add_event_listener(config,container_id)</code></pre>
     </a>
     <span class="signature">create_container(docker, data)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L128" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L129" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -337,6 +356,7 @@ Docker.add_event_listener(config,container_id)</code></pre>
 <pre><code class="elixir">config = Docker.config(address)
 {:ok,resp} = Docker.create_container(config,%{&quot;Image&quot; =&gt; &quot;registry:2&quot;})
 assert resp.code == 201</code></pre>
+<p>具体参数参考 (Docker Remote API)[https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container]</p>
 
   </section>
 </div>
@@ -348,7 +368,7 @@ assert resp.code == 201</code></pre>
     </a>
     <span class="signature">images(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L50" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L51" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -375,7 +395,7 @@ assert resp.code == 201</code></pre>
     </a>
     <span class="signature">info(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L62" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L63" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -394,6 +414,60 @@ assert resp.code == 201</code></pre>
 
   </section>
 </div>
+<div class="detail" id="start_container/2">
+  
+  <div class="detail-header">
+    <a href="#start_container/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">start_container(docker, containerId)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L142" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>启动容器</p>
+<h2 id="start_container/2-examples" class="section-heading">
+  <a href="#start_container/2-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<pre><code class="elixir">config = Docker.config(address)
+{:ok,resp} = Docker.start_container(config,&quot;containerId&quot;)</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="stop_container/2">
+  
+  <div class="detail-header">
+    <a href="#stop_container/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">stop_container(docker, containerId)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L154" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>停止容器</p>
+<h2 id="stop_container/2-examples" class="section-heading">
+  <a href="#stop_container/2-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<pre><code class="elixir">config = Docker.config(address)
+{:ok,resp} = Docker.stop_container(config,&quot;containerId&quot;)</code></pre>
+
+  </section>
+</div>
 <div class="detail" id="version/1">
   
   <div class="detail-header">
@@ -402,7 +476,7 @@ assert resp.code == 201</code></pre>
     </a>
     <span class="signature">version(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L74" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L75" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -429,7 +503,7 @@ assert resp.code == 201</code></pre>
     </a>
     <span class="signature">volumes(docker)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L78" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L79" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
