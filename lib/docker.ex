@@ -11,7 +11,7 @@ defmodule Docker do
   require Logger
 
   defstruct addr: "",
-            req: &Docker.TcpRequest.get/2
+            req: &Docker.Request.get/2
 
   @doc ~S"""
 
@@ -37,9 +37,7 @@ defmodule Docker do
     iex > Docker.containers(config)
   ```
   """
-  def containers(docker) do
-    docker.req.("/containers/json",docker.addr)
-  end
+  def containers(docker), do: docker.req.("/containers/json?all=true",docker.addr)
 
   @doc ~S"""
   获取镜像列表.
@@ -50,9 +48,7 @@ defmodule Docker do
     iex > Docker.images(config)
   ```
   """
-  def images(docker) do
-    docker.req.("/images/json",docker.addr)
-  end
+  def images(docker), do: docker.req.("/images/json",docker.addr)
 
   @doc ~S"""
   获取 Docker Info.
@@ -63,9 +59,7 @@ defmodule Docker do
     iex > Docker.info(config)
   ```
   """
-  def info(docker) do
-    docker.req.("/info",docker.addr)
-  end
+  def info(docker), do: docker.req.("/info",docker.addr)
 
   @doc ~S"""
   获取 Docker 版本信息.
@@ -76,13 +70,12 @@ defmodule Docker do
     iex > Docker.info(config)
   ```
   """
-  def version(docker) do
-    docker.req.("/version",docker.addr)
-  end
+  def version(docker) ,do: docker.req.("/version",docker.addr)
 
-  def volumes(docker) do
-    docker.req.("/volumes",docker.addr)
-  end
+  @doc """
+  获取 Volumes 列表
+  """
+  def volumes(docker) ,do: docker.req.("/volumes",docker.addr)
 
   @doc ~S"""
   添加 Docker Event 监听器.
@@ -102,9 +95,8 @@ defmodule Docker do
   ```
   """
   def add_event_listener(docker,pid \\self) do
-    Docker.TcpRequest.get("/events",docker.addr,pid)
+    Docker.Request.get("/events",docker.addr,pid)
   end
-
 
   @doc ~S"""
   添加 Docker Log 监听器.
@@ -115,8 +107,8 @@ defmodule Docker do
   Docker.add_event_listener(config,container_id)
   ```
   """
-  def add_log_listener(docker,container_id,pid\\self) do
-    Docker.TcpRequest.get("/containers/#{container_id}/logs",docker.addr,pid)
+  def add_log_listener(docker,id,pid\\self) do
+    Docker.Request.get("/containers/#{id}/logs",docker.addr,pid)
   end
 
   @doc ~S"""
@@ -132,7 +124,7 @@ defmodule Docker do
   """
   def create_container(docker,data) do
     data_string = Poison.encode!(data)
-    Docker.TcpRequest.post("/containers/create",docker.addr,data_string)
+    Docker.Request.post("/containers/create",docker.addr,data_string)
   end
 
   @doc """
@@ -143,10 +135,9 @@ defmodule Docker do
   config = Docker.config(address)
   {:ok,resp} = Docker.start_container(config,"containerId")
   """
-  def start_container(docker,containerId) do
-     Docker.TcpRequest.post("/containers/#{containerId}/start",docker.addr)
+  def start_container(docker,id) do
+    Docker.Request.post("/containers/#{id}/start",docker.addr)
   end
-
   @doc """
   停止容器
 
@@ -155,7 +146,14 @@ defmodule Docker do
   config = Docker.config(address)
   {:ok,resp} = Docker.stop_container(config,"containerId")
   """
-  def stop_container(docker,containerId) do
-     Docker.TcpRequest.post("/containers/#{containerId}/stop",docker.addr)
+  def stop_container(docker,id) do
+     Docker.Request.post("/containers/#{id}/stop",docker.addr)
+  end
+
+  @doc """
+  获取指定容器ID的信息
+  """
+  def inspect_container(docker,id) do
+   docker.req.("/containers/#{id}",docker.addr)
   end
 end

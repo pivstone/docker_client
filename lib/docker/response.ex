@@ -1,4 +1,4 @@
-defmodule Docker.TcpResponse do
+defmodule Docker.Response do
   @moduledoc """
   TCP Response 主要负责读取和解析 HTTP Response
   """
@@ -9,11 +9,11 @@ defmodule Docker.TcpResponse do
             chunked: false,
             len: 0
 
-  defimpl Inspect, for: Docker.TcpResponse do
+  defimpl Inspect, for: Docker.Response do
     @doc """
     格式化展示
     """
-    def inspect(%Docker.TcpResponse{}=resp,_) do
+    def inspect(%Docker.Response{}=resp,_) do
       """
       Response<
         code: #{resp.code}
@@ -85,7 +85,7 @@ defmodule Docker.TcpResponse do
 
 
   # 处理非 chunked 的数据
-  def handle_body(socket, %Docker.TcpResponse{:chunked => false} = resp,ln) do
+  def handle_body(socket, %Docker.Response{:chunked => false} = resp,ln) do
     {:ok, bin} = :gen_tcp.recv(socket,0)
     Logger.debug bin
     body = resp.body<>bin
@@ -99,7 +99,7 @@ defmodule Docker.TcpResponse do
       Map.put(resp,:body, Poison.decode!(resp.body))
     end
   end
-  def handle_body(socket,%Docker.TcpResponse{:chunked => true} = resp,l_n) do
+  def handle_body(socket,%Docker.Response{:chunked => true} = resp,l_n) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "#{bin}"
    cond do
@@ -117,7 +117,7 @@ defmodule Docker.TcpResponse do
     end
   end
 
-  def handle_body(socket,%Docker.TcpResponse{:chunked => true} = resp,l_n,pid) do
+  def handle_body(socket,%Docker.Response{:chunked => true} = resp,l_n,pid) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "steam #{bin}"
    cond do

@@ -1,4 +1,4 @@
-defmodule Docker.TcpRequest do
+defmodule Docker.Request do
   @moduledoc """
 
   TCP Request 主要负责发起 HTTP Request
@@ -43,8 +43,8 @@ defmodule Docker.TcpRequest do
 
   defp parse_response(socket) do
     # 解析 Socket 收到的数据
-    resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
-    resp =  if resp.len>0 ,do: Docker.TcpResponse.handle_body(socket,resp,0), else: resp
+    resp = Docker.Response.handle_header(socket,%Docker.Response{})
+    resp =  if resp.len > 0 or resp.chunked ,do: Docker.Response.handle_body(socket,resp,0), else: resp
     # HTTP 中 Socket 不复用,需要关闭
     :gen_tcp.close(socket)
     {:ok, resp}
@@ -80,8 +80,8 @@ defmodule Docker.TcpRequest do
     {:ok,socket} = init(target_url)
     send_request(socket,target_url)
     Task.start_link(fn ->
-      resp = Docker.TcpResponse.handle_header(socket,%Docker.TcpResponse{})
-      resp = Docker.TcpResponse.handle_body(socket,resp,0,pid)
+      resp = Docker.Response.handle_header(socket,%Docker.Response{})
+      resp = Docker.Response.handle_body(socket,resp,0,pid)
       # HTTP 中 Socket 不复用,需要关闭
       :gen_tcp.close(socket)
       {:ok, resp}
