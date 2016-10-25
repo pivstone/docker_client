@@ -112,10 +112,30 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#changes/2">changes(docker, id)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>CN:列出容器文件系统的变更
+EN:Inspect changes on a container’s filesystem</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#config/1">config(addr \\ &quot;unix:///var/run/docker.sock&quot;)</a>
   </div>
   
     <div class="summary-synopsis"><p>设置容器连接信息</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#container/2">container(docker, id)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>CN:获取指定容器ID的信息
+EN:Inspect a container</p>
 </div>
   
 </div>
@@ -157,28 +177,57 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#inspect_container/2">inspect_container(docker, id)</a>
+    <a href="#kill/2">kill(docker, id)</a>
   </div>
   
-    <div class="summary-synopsis"><p>获取指定容器ID的信息</p>
+    <div class="summary-synopsis"><p>CN:强制关闭容器
+EN:Kill a container</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#start_container/2">start_container(docker, id)</a>
+    <a href="#start/2">start(docker, id)</a>
   </div>
   
-    <div class="summary-synopsis"><p>启动容器</p>
+    <div class="summary-synopsis"><p>CN:启动容器
+EN:Start a container¶</p>
+<h2>Examples</h2>
+<pre><code class="elixir">config = Docker.config(address)
+{:ok,resp} = Docker.start(config,&quot;containerId&quot;)</code></pre>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#stop_container/2">stop_container(docker, id)</a>
+    <a href="#stats/2">stats(docker, id)</a>
   </div>
   
-    <div class="summary-synopsis"><p>停止容器</p>
+    <div class="summary-synopsis"><p>CN:列出容器中的资源状态
+EN:Get container stats based on resource usage</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#stop/2">stop(docker, id)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>CN:停止容器
+EN:Stop a container¶</p>
+<h2>Examples</h2>
+<pre><code class="elixir">config = Docker.config(address)
+{:ok,resp} = Docker.stop(config,&quot;containerId&quot;)</code></pre>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#top/2">top(docker, id)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>CN:列出容器中所有的进程信息
+EN:List processes running inside a container</p>
 </div>
   
 </div>
@@ -287,6 +336,27 @@ Docker.add_event_listener(config,container_id)</code></pre>
 
   </section>
 </div>
+<div class="detail" id="changes/2">
+  
+  <div class="detail-header">
+    <a href="#changes/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">changes(docker, id)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L177" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>CN:列出容器文件系统的变更
+EN:Inspect changes on a container’s filesystem</p>
+
+  </section>
+</div>
 <div class="detail" id="config/1">
   
     <span id="config/0" />
@@ -313,6 +383,27 @@ Docker.add_event_listener(config,container_id)</code></pre>
 
 <pre><code class="elixir">  iex &gt; config = Docker.config(&quot;unix:///var/run/docker.sock&quot;)
   iex &gt; config = Docker.config(&quot;http://192.168.0.1:12450&quot;)</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="container/2">
+  
+  <div class="detail-header">
+    <a href="#container/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">container(docker, id)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L157" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>CN:获取指定容器ID的信息
+EN:Inspect a container</p>
 
   </section>
 </div>
@@ -426,15 +517,15 @@ assert resp.code == 201</code></pre>
 
   </section>
 </div>
-<div class="detail" id="inspect_container/2">
+<div class="detail" id="kill/2">
   
   <div class="detail-header">
-    <a href="#inspect_container/2" class="detail-link" title="Link to this function">
+    <a href="#kill/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">inspect_container(docker, id)</span>
+    <span class="signature">kill(docker, id)</span>
     
-      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L156" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L182" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -442,17 +533,18 @@ assert resp.code == 201</code></pre>
     
   </div>
   <section class="docstring">
-    <p>获取指定容器ID的信息</p>
+    <p>CN:强制关闭容器
+EN:Kill a container</p>
 
   </section>
 </div>
-<div class="detail" id="start_container/2">
+<div class="detail" id="start/2">
   
   <div class="detail-header">
-    <a href="#start_container/2" class="detail-link" title="Link to this function">
+    <a href="#start/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">start_container(docker, id)</span>
+    <span class="signature">start(docker, id)</span>
     
       <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L138" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -462,24 +554,46 @@ assert resp.code == 201</code></pre>
     
   </div>
   <section class="docstring">
-    <p>启动容器</p>
-<h2 id="start_container/2-examples" class="section-heading">
-  <a href="#start_container/2-examples" class="hover-link"><i class="icon-link"></i></a>
+    <p>CN:启动容器
+EN:Start a container¶</p>
+<h2 id="start/2-examples" class="section-heading">
+  <a href="#start/2-examples" class="hover-link"><i class="icon-link"></i></a>
   Examples
 </h2>
 
 <pre><code class="elixir">config = Docker.config(address)
-{:ok,resp} = Docker.start_container(config,&quot;containerId&quot;)</code></pre>
+{:ok,resp} = Docker.start(config,&quot;containerId&quot;)</code></pre>
 
   </section>
 </div>
-<div class="detail" id="stop_container/2">
+<div class="detail" id="stats/2">
   
   <div class="detail-header">
-    <a href="#stop_container/2" class="detail-link" title="Link to this function">
+    <a href="#stats/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">stop_container(docker, id)</span>
+    <span class="signature">stats(docker, id)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L171" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>CN:列出容器中的资源状态
+EN:Get container stats based on resource usage</p>
+
+  </section>
+</div>
+<div class="detail" id="stop/2">
+  
+  <div class="detail-header">
+    <a href="#stop/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">stop(docker, id)</span>
     
       <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L149" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -489,14 +603,36 @@ assert resp.code == 201</code></pre>
     
   </div>
   <section class="docstring">
-    <p>停止容器</p>
-<h2 id="stop_container/2-examples" class="section-heading">
-  <a href="#stop_container/2-examples" class="hover-link"><i class="icon-link"></i></a>
+    <p>CN:停止容器
+EN:Stop a container¶</p>
+<h2 id="stop/2-examples" class="section-heading">
+  <a href="#stop/2-examples" class="hover-link"><i class="icon-link"></i></a>
   Examples
 </h2>
 
 <pre><code class="elixir">config = Docker.config(address)
-{:ok,resp} = Docker.stop_container(config,&quot;containerId&quot;)</code></pre>
+{:ok,resp} = Docker.stop(config,&quot;containerId&quot;)</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="top/2">
+  
+  <div class="detail-header">
+    <a href="#top/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">top(docker, id)</span>
+    
+      <a href="https://github.com/pivstone/docker-us-connector/blob/master/lib/docker.ex#L165" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>CN:列出容器中所有的进程信息
+EN:List processes running inside a container</p>
 
   </section>
 </div>

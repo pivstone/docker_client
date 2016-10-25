@@ -162,22 +162,22 @@ defmodule Docker do
   CN:列出容器中所有的进程信息
   EN:List processes running inside a container
   """
-  def top(docker,id), do:docker.req.("/containers/#{id}/top",docker.addr)
+  def top(docker,id), do: docker.req.("/containers/#{id}/top",docker.addr)
 
   @doc """
   CN:列出容器中的资源状态
   EN:Get container stats based on resource usage
   """
-  def stats(docker,id), do:docker.req.("/containers/#{id}/stats",docker.addr)
+  def stats(docker,id), do: docker.req.("/containers/#{id}/stats",docker.addr)
 
   @doc """
   CN:列出容器文件系统的变更
   EN:Inspect changes on a container’s filesystem
   """
-  def changes(docker,id), do:docker.req.("/containers/#{id}/changes",docker.addr)
+  def changes(docker,id), do: docker.req.("/containers/#{id}/changes",docker.addr)
   @doc """
   CN:强制关闭容器
   EN:Kill a container
   """
-  def kill(docker,id), do:docker.req.("/containers/#{id}/kill",docker.addr)
+  def kill(docker,id), do: docker.req.("/containers/#{id}/kill",docker.addr)
 end
