@@ -9,6 +9,8 @@ defmodule Docker.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps(),
      name: "docker_client",
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
      source_url: "https://github.com/pivstone/docker-us-connector",
      docs: [main: "readme", # The main page in the docs
           extras: ["README.md"]]
@@ -35,6 +37,7 @@ defmodule Docker.Mixfile do
     [
       {:poison, "~> 2.2"},
       {:ex_doc, "~> 0.14", only: :dev},
+      {:excoveralls, "~> 0.5", only: :test},
       {:meck, "~> 0.8.4", only: :test}
     ]
   end
