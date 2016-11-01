@@ -4,6 +4,7 @@ defmodule Docker.Request do
   TCP Request 主要负责发起 HTTP Request
   """
   require Logger
+  alias Docker.Response
 
   defp init(url) do
     # 因为 HTTP Protocol 的关系用 line 来recv 比较舒服
@@ -43,8 +44,8 @@ defmodule Docker.Request do
 
   defp parse_response(socket) do
     # 解析 Socket 收到的数据
-    resp = Docker.Response.handle_header(socket,%Docker.Response{})
-    resp =  if resp.len > 0 or resp.chunked ,do: Docker.Response.handle_body(socket,resp,0), else: resp
+    resp = Response.handle_header(socket,%Response{})
+    resp =  if resp.len > 0 or resp.chunked ,do: Response.handle_body(socket,resp,0), else: resp
     # HTTP 中 Socket 不复用,需要关闭
     :gen_tcp.close(socket)
     {:ok, resp}
@@ -80,8 +81,8 @@ defmodule Docker.Request do
     {:ok,socket} = init(target_url)
     send_request(socket,target_url)
     Task.start_link(fn ->
-      resp = Docker.Response.handle_header(socket,%Docker.Response{})
-      resp = Docker.Response.handle_body(socket,resp,0,pid)
+      resp = Response.handle_header(socket,%Response{})
+      resp = Response.handle_body(socket,resp,0,pid)
       # HTTP 中 Socket 不复用,需要关闭
       :gen_tcp.close(socket)
       {:ok, resp}

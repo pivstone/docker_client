@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+@Content-Length: 850
+@Content-Type: application/json
+@Date: Mon, 31 Oct 2016 10:14:06 GMT
+@Server: Docker/1.12.1 (linux)
+@
+@[{"Id":"ccb46930869ea70f55fae0f29904a96651c59635e5bb905bfe9c5da9ed2a7021","Names":["/hungry_fermat"],"Image":"nginx","ImageID":"sha256:ba6bed934df2e644fdd34e9d324c80f3c615544ee9a93e4ce3cfddfcf84bdbc2","Command":"nginx -g 'daemon off;'","Created":1476779504,"Ports":[{"PrivatePort":443,"Type":"tcp"},{"PrivatePort":80,"Type":"tcp"}],"Labels":{},"State":"running","Status":"Up 9 seconds","HostConfig":{"NetworkMode":"default"},"NetworkSettings":{"Networks":{"bridge":{"IPAMConfig":null,"Links":null,"Aliases":null,"NetworkID":"d7ab7aa85ce715d33505f3b9363e4a4f5309ca67a0886d1d115f26859b3c7a62","EndpointID":"60290ee49fc3f819072985ce13acf7b1574cf6fdae0b7d3c26671ee4ecc08db2","Gateway":"172.17.0.1","IPAddress":"172.17.0.2","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"MacAddress":"02:42:ac:11:00:02"}}},"Mounts":[]}]
+@

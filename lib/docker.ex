@@ -127,7 +127,7 @@ defmodule Docker do
     Docker.Request.post("/containers/create",docker.addr,data_string)
   end
 
-  @doc """
+  @doc ~S"""
   CN:启动容器
   EN:Start a container¶
   ## Examples
@@ -150,7 +150,7 @@ defmodule Docker do
      Docker.Request.post("/containers/#{id}/stop",docker.addr)
   end
 
-  @doc """
+  @doc ~S"""
   CN:获取指定容器ID的信息
   EN:Inspect a container
   """
@@ -158,24 +158,24 @@ defmodule Docker do
    docker.req.("/containers/#{id}/json",docker.addr)
   end
 
-  @doc """
+  @doc ~S"""
   CN:列出容器中所有的进程信息
   EN:List processes running inside a container
   """
   def top(docker,id), do: docker.req.("/containers/#{id}/top",docker.addr)
 
-  @doc """
+  @doc ~S"""
   CN:列出容器中的资源状态
   EN:Get container stats based on resource usage
   """
   def stats(docker,id), do: docker.req.("/containers/#{id}/stats",docker.addr)
 
-  @doc """
+  @doc ~S"""
   CN:列出容器文件系统的变更
   EN:Inspect changes on a container’s filesystem
   """
   def changes(docker,id), do: docker.req.("/containers/#{id}/changes",docker.addr)
-  @doc """
+  @doc ~S"""
   CN:强制关闭容器
   EN:Kill a container
   """

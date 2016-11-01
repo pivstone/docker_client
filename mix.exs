@@ -34,7 +34,8 @@ defmodule Docker.Mixfile do
   defp deps do
     [
       {:poison, "~> 2.2"},
-      {:ex_doc, "~> 0.14", only: :dev}
+      {:ex_doc, "~> 0.14", only: :dev},
+      {:meck, "~> 0.8.4", only: :test}
     ]
   end
 

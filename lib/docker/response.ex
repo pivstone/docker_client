@@ -3,6 +3,7 @@ defmodule Docker.Response do
   TCP Response 主要负责读取和解析 HTTP Response
   """
   require Logger
+  alias Docker.Response
   defstruct code: 404,
             body: <<"">>,
             headers: Map.new,
@@ -13,7 +14,7 @@ defmodule Docker.Response do
     @doc """
     格式化展示
     """
-    def inspect(%Docker.Response{}=resp,_) do
+    def inspect(%Response{}=resp,_) do
       """
       Response<
         code: #{resp.code}
@@ -85,7 +86,7 @@ defmodule Docker.Response do
 
 
   # 处理非 chunked 的数据
-  def handle_body(socket, %Docker.Response{:chunked => false} = resp,ln) do
+  def handle_body(socket, %Response{:chunked => false} = resp,ln) do
     {:ok, bin} = :gen_tcp.recv(socket,0)
     Logger.debug bin
     body = resp.body<>bin
@@ -99,7 +100,7 @@ defmodule Docker.Response do
       Map.put(resp,:body, Poison.decode!(resp.body))
     end
   end
-  def handle_body(socket,%Docker.Response{:chunked => true} = resp,l_n) do
+  def handle_body(socket,%Response{:chunked => true} = resp,l_n) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "#{bin}"
    cond do
@@ -117,7 +118,7 @@ defmodule Docker.Response do
     end
   end
 
-  def handle_body(socket,%Docker.Response{:chunked => true} = resp,l_n,pid) do
+  def handle_body(socket,%Response{:chunked => true} = resp,l_n,pid) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "steam #{bin}"
    cond do
