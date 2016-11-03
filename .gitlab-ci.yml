@@ -1,6 +1,8 @@
+image: trenpixster/elixir:latest
 
-
-coveralls:
+before_script:
+  - mix deps.get
+  
+mix:
   script:
-    - mix deps.get
     - mix coveralls 
