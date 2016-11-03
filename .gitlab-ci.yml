@@ -1,4 +1,4 @@
-image: trenpixster/elixir:latest
+image: library/elixir:latest
 
 before_script:
   - mix deps.get
