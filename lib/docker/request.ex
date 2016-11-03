@@ -61,6 +61,15 @@ defmodule Docker.Request do
     parse_response(socket)
   end
 
+
+  def delete(url,addr) do
+    target_url = URI.merge(URI.parse(addr), url)|> to_string
+    {:ok,socket} = init(target_url)
+    send_request(socket,target_url,"DELETE")
+    parse_response(socket)
+  end
+
+
   @doc """
   POST 请求
   """

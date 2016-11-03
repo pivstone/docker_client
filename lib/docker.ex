@@ -158,6 +158,10 @@ defmodule Docker do
    docker.req.("/containers/#{id}/json",docker.addr)
   end
 
+  def remove_container(docker,id) do
+     Docker.Request.delete("/containers/#{id}",docker.addr)
+  end
+
   @doc ~S"""
   CN:列出容器中所有的进程信息
   EN:List processes running inside a container
