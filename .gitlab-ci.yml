@@ -1,7 +1,6 @@
-image: library/elixir:latest
 
 before_script:
-  - mix deps.local
+  - mix local.hex
   - mix deps.get
 
 mix:
