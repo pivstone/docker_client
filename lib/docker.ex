@@ -62,6 +62,17 @@ defmodule Docker do
   def info(docker), do: docker.req.("/info",docker.addr)
 
   @doc ~S"""
+  获取 Docker Swarm nodes Info.
+
+  ## Examples
+  ```elixir
+    iex > config = Docker.config(address)
+    iex > Docker.nodes(config)
+  ```
+  """
+  def nodes(docker), do: docker.req.("/nodes",docker.addr)
+
+  @doc ~S"""
   获取 Docker 版本信息.
 
   ## Examples
@@ -85,7 +96,7 @@ defmodule Docker do
   defmodule Example do
     def listen do
       receive do
-        {:ok, _ } -> IO.puts "World"
+        {:ok, msg } -> IO.puts msg
       end
       listen
     end
