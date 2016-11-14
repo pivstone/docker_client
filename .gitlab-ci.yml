@@ -8,4 +8,4 @@ mix:
   script:
     - mix coveralls
   tags:
-    - xbeco
+    - elixir
