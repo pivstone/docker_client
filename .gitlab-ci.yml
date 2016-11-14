@@ -1,8 +1,11 @@
 image: library/elixir:latest
 
 before_script:
+  - mix deps.local
   - mix deps.get
-  
+
 mix:
   script:
-    - mix coveralls 
+    - mix coveralls
+  tags:
+    - xbeco
