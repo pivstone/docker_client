@@ -100,6 +100,7 @@ defmodule Docker.Response do
       Map.put(resp,:body, Poison.decode!(resp.body))
     end
   end
+  
   def handle_body(socket,%Response{:chunked => true} = resp,l_n) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "#{bin}"

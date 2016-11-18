@@ -8,3 +8,4 @@ mix:
     - mix coveralls
   tags:
     - xbeco
+    
