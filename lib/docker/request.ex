@@ -48,7 +48,7 @@ defmodule Docker.Request do
     resp =  if resp.len > 0 or resp.chunked ,do: Response.handle_body(socket,resp,0), else: resp
     # HTTP 中 Socket 不复用,需要关闭
     :gen_tcp.close(socket)
-    {:ok, resp}
+    resp.body
   end
 
   @doc """

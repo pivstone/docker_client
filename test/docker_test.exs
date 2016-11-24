@@ -21,15 +21,15 @@ defmodule DockerTest do
   test "GET containers list",%{config: config} do
 
     mock("test/data/containers/json.data")
-    {:ok,resp} = Docker.containers(config)
-    assert resp.code==200
+    body = Docker.containers(config)
+    assert body != nil
     :meck.unload(:gen_tcp)
   end
 
   test "Inspect Containers" ,%{config: config} do
     mock("test/data/containers/760c0e4240c7.data")
-    {:ok,resp} = Docker.container(config,"ccb46930869e")
-    assert resp.code==200
+    body = Docker.container(config,"ccb46930869e")
+    assert body != nil
     :meck.unload(:gen_tcp)
   end
 
