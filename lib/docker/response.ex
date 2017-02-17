@@ -100,7 +100,7 @@ defmodule Docker.Response do
       Map.put(resp,:body, Poison.decode!(resp.body))
     end
   end
-  
+
   def handle_body(socket,%Response{:chunked => true} = resp,l_n) do
    {:ok, bin} = :gen_tcp.recv(socket,0)
    Logger.debug "#{bin}"
@@ -120,20 +120,33 @@ defmodule Docker.Response do
   end
 
   def handle_body(socket,%Response{:chunked => true} = resp,l_n,pid) do
-   {:ok, bin} = :gen_tcp.recv(socket,0)
+    bin=
+      case :gen_tcp.recv(socket,0,1000) do
+       {:error,:timeout} ->
+            Logger.debug "timeout"
+            :ok =   :gen_tcp.send(socket,"0\r\n")
+            handle_body(socket,resp,l_n,pid)
+       {:ok,bin} ->
+         bin
+    end
    Logger.debug "steam #{bin}"
    cond do
       # Chunked 传输的结束符号为 "0\r\n"
       # refs:https://en.wikipedia.org/wiki/Chunked_transfer_encoding
       bin == "0\r\n" ->
-        Logger.debug "over"
-        Logger.debug resp.body
+        handle_body(socket,resp,l_n,pid)
       # 空行数据的话 跳过
       bin == "\r\n" ->
         handle_body(socket,resp,l_n,pid)
       true ->
         if rem(l_n,2) == 0 do
-          len = String.to_integer(String.strip(bin),16)
+          len =
+            try do
+              String.to_integer(String.strip(bin),16)
+            rescue
+              ArgumentError ->
+                handle_body(socket,resp,l_n,pid)
+            end
           resp = Map.put(resp,:len,len)
           handle_body(socket,resp,l_n+1,pid)
         else

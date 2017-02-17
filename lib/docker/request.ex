@@ -10,7 +10,7 @@ defmodule Docker.Request do
     # 因为 HTTP Protocol 的关系用 line 来recv 比较舒服
     case url do
         "unix://"<>path ->
-          opts = [:binary,packet: :line,active: false]
+          opts = [:binary,packet: :line,active: false, keepalive: true]
           :gen_tcp.connect({:local,path}, 0, opts)
         "http://"<>_ ->
           uri = URI.parse(url)
@@ -32,6 +32,7 @@ defmodule Docker.Request do
     data_string =
       if data do
         data_string <>"Content-Type: application/json\r\n"
+                    <>"Connection: Keep-Alive\r\n"
                     <>"Content-Length: #{String.length(data)}\r\n\r\n"
                     <>"#{data}"
       else
