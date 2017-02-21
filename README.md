@@ -62,6 +62,6 @@ iex> Docker.containers(config)
    "Status" => "Up 59 seconds"}]
 ```
 
-Docs
+## Docs
 
 https://pivstone.github.io/docker_client/readme.html
