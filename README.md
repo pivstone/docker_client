@@ -61,3 +61,7 @@ iex> Docker.containers(config)
     %{"PrivatePort" => 80, "Type" => "tcp"}], "State" => "running",
    "Status" => "Up 59 seconds"}]
 ```
+
+Docs
+
+https://pivstone.github.io/docker_client/readme.html
