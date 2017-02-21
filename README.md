@@ -26,7 +26,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def deps do
-      [{:docker_us_connector, "~> 0.1.0"}]
+      [{:docker_client,git: "https://pivstone.github.io/docker_client.git"}]
     end
     ```
 
